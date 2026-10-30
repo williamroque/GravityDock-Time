@@ -1,5 +1,5 @@
-import { BaseNode } from '@tracereactive/types';
-import type { InputDefinition, OutputDefinition, PropertyDefinition } from '@tracereactive/types';
+import { BaseNode } from '@gravitydock/types';
+import type { InputDefinition, OutputDefinition, PropertyDefinition } from '@gravitydock/types';
 import { getYear, getMonth, getDate, getHours, getMinutes, getSeconds, parseISO } from 'date-fns';
 
 export class ExtractDatePartsNode extends BaseNode {

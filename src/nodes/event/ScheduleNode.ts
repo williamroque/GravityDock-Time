@@ -1,5 +1,5 @@
-import { EventNode } from '@tracereactive/types';
-import type { InputDefinition, OutputDefinition, PropertyDefinition } from '@tracereactive/types';
+import { EventNode } from '@gravitydock/types';
+import type { InputDefinition, OutputDefinition, PropertyDefinition } from '@gravitydock/types';
 import { addDays, differenceInMilliseconds, getDay, set } from 'date-fns';
 
 export class ScheduleNode extends EventNode {

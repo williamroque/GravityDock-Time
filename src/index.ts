@@ -10,9 +10,9 @@ import { ParseDateNode } from './nodes/formatting/ParseDateNode';
 import { FormatDateNode } from './nodes/formatting/FormatDateNode';
 import { ExtractDatePartsNode } from './nodes/formatting/ExtractDatePartsNode';
 
-import type { TraceReactiveAPI } from '@tracereactive/types';
+import type { GravityDockAPI } from '@gravitydock/types';
 
-declare const traceReactive: TraceReactiveAPI;
+declare const gravityDock: GravityDockAPI;
 
 const nodes = [
     new CurrentTimeNode(),
@@ -41,9 +41,9 @@ const serializableNodes = nodes.map(n => ({
     dynamicOutputs: n.dynamicOutputs
 }));
 
-traceReactive.registerNodes(serializableNodes);
+gravityDock.registerNodes(serializableNodes);
 
-traceReactive.onEvaluateNode(async ({ typeId, inputs, properties }: any) => {
+gravityDock.onEvaluateNode(async ({ typeId, inputs, properties }: any) => {
     const node = nodes.find(n => n.typeId === typeId);
     if (!node) {
         throw new Error(`Unknown node type: ${typeId}`);

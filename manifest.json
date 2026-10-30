@@ -1,5 +1,5 @@
 {
-  "id": "com.tracereactive.time",
+  "id": "com.gravitydock.time",
   "name": "Time",
   "version": "1.0.0",
   "description": "Nodes for time-based events, scheduling, and calendar-accurate math.",

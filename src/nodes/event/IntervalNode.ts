@@ -1,5 +1,5 @@
-import { EventNode } from '@tracereactive/types';
-import type { InputDefinition, OutputDefinition, PropertyDefinition } from '@tracereactive/types';
+import { EventNode } from '@gravitydock/types';
+import type { InputDefinition, OutputDefinition, PropertyDefinition } from '@gravitydock/types';
 
 export class IntervalNode extends EventNode {
     readonly typeId = 'time-interval';
@@ -62,8 +62,8 @@ export class IntervalNode extends EventNode {
                     const time = new Date().toISOString();
                     IntervalNode.latestEvents.set(nodeId, { time });
                     
-                    if (typeof (globalThis as any).traceReactive !== 'undefined' && (globalThis as any).traceReactive.emitEvent) {
-                        (globalThis as any).traceReactive.emitEvent(nodeId);
+                    if (typeof (globalThis as any).gravityDock !== 'undefined' && (globalThis as any).gravityDock.emitEvent) {
+                        (globalThis as any).gravityDock.emitEvent(nodeId);
                     } else {
                         const emit = IntervalNode.emitters.get(nodeId);
                         if (emit) emit(nodeId);

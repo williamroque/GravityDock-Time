@@ -40,7 +40,7 @@ export class IntervalNode extends EventNode {
     async evaluate(inputs: Record<string, any>, properties: Record<string, any>): Promise<Record<string, any>> {
         const nodeId = properties['_nodeId'];
         const intervalMs = typeof properties['intervalMs'] === 'number' ? properties['intervalMs'] : 1000;
-        const enabled = properties['enabled'] !== false;
+        const enabled = properties['enabled'] !== false && properties['_action'] !== 'unregister';
 
         if (!nodeId) return {};
 
@@ -48,7 +48,6 @@ export class IntervalNode extends EventNode {
         const settingsChanged = !currentSettings || currentSettings.intervalMs !== intervalMs || currentSettings.enabled !== enabled;
 
         if (settingsChanged) {
-            // Clean up previous interval if it exists and settings changed
             const existingInterval = this.intervalIds.get(nodeId);
             if (existingInterval) {
                 clearInterval(existingInterval);
@@ -56,6 +55,7 @@ export class IntervalNode extends EventNode {
             }
 
             this.intervalSettings.set(nodeId, { intervalMs, enabled });
+            IntervalNode.latestEvents.delete(nodeId);
 
             if (enabled) {
                 const intervalId = setInterval(() => {
@@ -74,6 +74,7 @@ export class IntervalNode extends EventNode {
         }
 
         const latestEvent = IntervalNode.latestEvents.get(nodeId);
+        IntervalNode.latestEvents.delete(nodeId);
         return {
             'Time': latestEvent ? latestEvent.time : new Date().toISOString()
         };

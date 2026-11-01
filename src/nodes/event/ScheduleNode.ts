@@ -80,13 +80,14 @@ export class ScheduleNode extends EventNode {
         const msToWait = differenceInMilliseconds(nextTime, now);
 
         const timeoutId = setTimeout(() => {
-            const emit = ScheduleNode.emitters.get(nodeId);
-            if (emit) {
-                const time = new Date().toISOString();
-                ScheduleNode.latestEvents.set(nodeId, { time });
-                emit(nodeId);
+            const time = new Date().toISOString();
+            ScheduleNode.latestEvents.set(nodeId, { time });
+            if (typeof (globalThis as any).gravityDock !== 'undefined' && (globalThis as any).gravityDock.emitEvent) {
+                (globalThis as any).gravityDock.emitEvent(nodeId);
+            } else {
+                const emit = ScheduleNode.emitters.get(nodeId);
+                if (emit) emit(nodeId);
             }
-            // Reschedule
             this.scheduleNext(nodeId, timeOfDay, daysOfWeek);
         }, msToWait);
 
@@ -97,7 +98,7 @@ export class ScheduleNode extends EventNode {
         const nodeId = properties['_nodeId'];
         const timeOfDay = properties['timeOfDay'] || '09:00';
         const daysOfWeek = properties['daysOfWeek'] || 'Everyday';
-        const enabled = properties['enabled'] !== false;
+        const enabled = properties['enabled'] !== false && properties['_action'] !== 'unregister';
 
         if (!nodeId) return {};
 
@@ -112,6 +113,7 @@ export class ScheduleNode extends EventNode {
         }
 
         const latestEvent = ScheduleNode.latestEvents.get(nodeId);
+        ScheduleNode.latestEvents.delete(nodeId);
         return {
             'Time': latestEvent ? latestEvent.time : new Date().toISOString()
         };
